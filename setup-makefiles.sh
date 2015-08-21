@@ -119,7 +119,7 @@ ifeq (\$(TARGET_DEVICE),g720t)
 include \$(CLEAR_VARS)
 LOCAL_MODULE := com.qualcomm.services.location
 LOCAL_MODULE_OWNER := $VENDOR
-LOCAL_SRC_FILES := proprietary/app/\$(LOCAL_MODULE).apk
+LOCAL_SRC_FILES := proprietary/priv-app/\$(LOCAL_MODULE)/\$(LOCAL_MODULE).apk
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
 LOCAL_MODULE_CLASS := APPS

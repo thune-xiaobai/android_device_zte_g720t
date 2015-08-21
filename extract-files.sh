@@ -14,4 +14,4 @@ for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$ | sed -e 's#^/s
     adb pull /system/$FILE $BASE/$FILE
 done
 
-#./setup-makefiles.sh
+./setup-makefiles.sh

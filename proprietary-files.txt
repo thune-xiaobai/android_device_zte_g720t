@@ -1,3 +1,10 @@
+#app
+app/qcrilmsgtunnel/qcrilmsgtunnel.apk
+app/TimeService/TimeService.apk
+priv-app/com.qualcomm.services.location/com.qualcomm.services.location.apk
+framework/qcnvitems.jar
+framework/qcrilhook.jar
+#bin
 bin/adsprpcd 
 bin/vm_bms 
 bin/btnvtool 

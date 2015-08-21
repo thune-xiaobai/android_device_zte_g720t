@@ -5,10 +5,14 @@ USE_CAMERA_STUB := true
 
 # Architecture
 TARGET_ARCH := arm
+TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_CPU_ABI := arm-v7a
+TARGET_CPU_ABI := armieabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a53
+TARGET_CPU_SMP := true
+ARCH_ARM_HAVE_TLS_REGISTER := true
 
 #TARGET_2ND_ARCH := arm
 #TARGET_2ND_ARCH_VARIANT := armv7-a-neon

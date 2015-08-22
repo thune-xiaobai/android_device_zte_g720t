@@ -7,13 +7,13 @@ $(call inherit-product-if-exists, vendor/zte/g720t/g720t-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/zte/g720t/overlay
 
-ifeq ($(TARGET_PREBUILT_KERNEL),)
-	LOCAL_KERNEL := device/zte/g720t/kernel
-else
-	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
-endif
+#ifeq ($(TARGET_PREBUILT_KERNEL),)
+#	LOCAL_KERNEL := device/zte/g720t/kernel
+#else
+#	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
+#endif
 
-PRODUCT_COPY_FILES += \
+#PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel \
     device/zte/g720t/dt.img:dt.img
 

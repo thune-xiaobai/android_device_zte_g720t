@@ -3,6 +3,9 @@ USE_CAMERA_STUB := true
 # inherit from the proprietary version
 -include vendor/zte/g720t/BoardConfigVendor.mk
 
+TARGET_NO_RADIOIMAGE := true
+TARGET_LDPRELOAD := libNimsWrap.so
+
 # Architecture
 TARGET_ARCH := arm
 TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
@@ -24,11 +27,6 @@ TARGET_BOARD_SUFFIX := _32
 TARGET_BOARD_PLATFORM := msm8916
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno405
 
-TARGET_GLOBAL_CFLAGS += -mfpu=neon -mfloat-abi=softfp
-TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
-TARGET_CPU_SMP := true
-ARCH_ARM_HAVE_TLS_REGISTER := true
-
 # Properties
 TARGET_SYSTEM_PROP += device/zte/g720t/system.prop
 
@@ -41,11 +39,11 @@ TARGET_NO_BOOTLOADER := true
 BOARD_KERNEL_CMDLINE := no_console_suspend boot_cpus=0,4,5,6,7 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci msm-poweroff.download_mode=0 msm-poweroff.enable_panic_dload=0
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_SEPARATED_DT := true
+#BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
-TARGET_KERNEL_SOURCE := kernel/huawei/msm8916
-TARGET_KERNEL_ADDITIONAL_CONFIG := hw_msm8916_defconfig
+TARGET_KERNEL_SOURCE := kernel/qcom/msm8916
+TARGET_KERNEL_CONFIG := msm8916_defconfig
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -104,10 +102,6 @@ BOARD_USES_QCOM_HARDWARE := true
 
 # Qualcomm support
 BOARD_USES_QC_TIME_SERVICES := true
-ifneq ($(QCPATH),)
-BOARD_USES_QCNE := true
-endif
-BOARD_USES_QCOM_HARDWARE := true
 
 # Video
 TARGET_HAVE_SIGNED_VENUS_FW := true
@@ -134,13 +128,13 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432 #32M
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 33554432 #32M
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1572864 #1536M
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1610612736 #1536M
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 13168000000 #12859375k
 BOARD_CACHEIMAGE_PARTITION_SIZE := 536870912 #512M
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432 #32M
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 
-TARGET_PREBUILT_KERNEL := device/zte/g720t/kernel
+#TARGET_PREBUILT_KERNEL := device/zte/g720t/kernel
 
 # Recovery
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -148,6 +142,7 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 
 # TWRP-Specific
 TARGET_RECOVERY_FSTAB := device/zte/g720t/rootdir/etc/fstab.qcom
+RECOVERY_FSTAB_VERSION := 2
 TW_THEME := portrait_hdpi
 RECOVERY_SDCARD_ON_DATA := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true

@@ -93,8 +93,14 @@ PRODUCT_COPY_FILES += \
     device/zte/g720t/permissions/qcrilhook.xml:system/etc/permissions/qcrilhook.xml \
     device/zte/g720t/permissions/rcsservice.xml:system/etc/permissions/rcsservice.xml 
 
+#hostapd
+PRODUCT_COPY_FILES += \
+    device/zte/g720t/hostapd/hostapd.accept:system/etc/hostapd/hostapd.accept \
+    device/zte/g720t/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf \
+    device/zte/g720t/hostapd/hostapd.deny:system/etc/hostapd/hostapd.deny
+
 #misc
-PODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES += \
     device/zte/g720t/misc/ds1-default.xml:system/etc/ds1-default.xml \
     device/zte/g720t/misc/flp.conf:system/etc/flp.conf \
     device/zte/g720t/misc/izat.conf:system/etc/izat.conf \

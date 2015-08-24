@@ -159,5 +159,7 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 # Vold
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
 
+ANDROID_COMMON_BUILD_MK := true
+
 BOARD_HAS_NO_SELECT_BUTTON := true
 

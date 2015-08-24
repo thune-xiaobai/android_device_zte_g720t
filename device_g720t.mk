@@ -17,7 +17,7 @@ DEVICE_PACKAGE_OVERLAYS += device/zte/g720t/overlay
     $(LOCAL_KERNEL):kernel \
     device/zte/g720t/dt.img:dt.img
 
-$(call inherit-product, build/target/product/full.mk)
+#$(call inherit-product, build/target/product/full.mk)
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_g720t

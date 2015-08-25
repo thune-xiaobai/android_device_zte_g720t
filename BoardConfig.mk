@@ -35,15 +35,16 @@ TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 TARGET_NO_BOOTLOADER := true
 
 # Kernel
-#BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := device/zte/g720t/mkbootimg.mk
 BOARD_KERNEL_CMDLINE := no_console_suspend boot_cpus=0,4,5,6,7 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci msm-poweroff.download_mode=0 msm-poweroff.enable_panic_dload=0
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
-#BOARD_KERNEL_SEPARATED_DT := true
+BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
-TARGET_KERNEL_SOURCE := kernel/qcom/msm8916
-TARGET_KERNEL_CONFIG := msm8916_defconfig
+BOARD_KERNEL_IMAGE_NAME := zImage
+#TARGET_KERNEL_SOURCE := kernel/qcom/msm8916
+#TARGET_KERNEL_CONFIG := msm8916_defconfig
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"

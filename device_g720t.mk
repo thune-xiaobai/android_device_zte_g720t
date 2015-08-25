@@ -5,6 +5,8 @@ $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
 $(call inherit-product-if-exists, vendor/zte/g720t/g720t-vendor.mk)
 
+$(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)
+
 DEVICE_PACKAGE_OVERLAYS += device/zte/g720t/overlay
 
 #ifeq ($(TARGET_PREBUILT_KERNEL),)
@@ -13,8 +15,8 @@ DEVICE_PACKAGE_OVERLAYS += device/zte/g720t/overlay
 #	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 #endif
 
-#PRODUCT_COPY_FILES += \
-    $(LOCAL_KERNEL):kernel \
+PRODUCT_COPY_FILES += \
+    device/zte/g720t/kernel:kernel \
     device/zte/g720t/dt.img:dt.img
 
 #$(call inherit-product, build/target/product/full.mk)
@@ -54,6 +56,9 @@ PRODUCT_COPY_FILES += \
 # Feature definition files for msm8916
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:system/etc/permissions/android.hardware.sensor.stepcounter.xml \
+    frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:system/etc/permissions/android.hardware.sensor.stepdetector.xml \
+    frameworks/native/data/etc/android.hardware.consumerir.xml:system/etc/permissions/android.hardware.consumerir.xml \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \

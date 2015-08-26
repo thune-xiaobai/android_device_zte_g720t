@@ -4,7 +4,7 @@ USE_CAMERA_STUB := true
 -include vendor/zte/g720t/BoardConfigVendor.mk
 
 TARGET_NO_RADIOIMAGE := true
-TARGET_LDPRELOAD := libNimsWrap.so
+#TARGET_LDPRELOAD := libNimsWrap.so
 
 # Architecture
 TARGET_ARCH := arm
@@ -34,9 +34,12 @@ TARGET_SYSTEM_PROP += device/zte/g720t/system.prop
 TARGET_BOOTLOADER_BOARD_NAME := MSM8916
 TARGET_NO_BOOTLOADER := true
 
+# Flags
+COMMON_GLOBAL_CFLAGS += -D_ION_HEAP_MASK_COMPATIBILITY_WA
+
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := device/zte/g720t/mkbootimg.mk
-BOARD_KERNEL_CMDLINE := no_console_suspend boot_cpus=0,4,5,6,7 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci msm-poweroff.download_mode=0 msm-poweroff.enable_panic_dload=0 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := no_console_suspend boot_cpus=0,4,5,6,7 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci msm-poweroff.download_mode=0 msm-poweroff.enable_panic_dload=0 androidboot.selinux=disabled
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
@@ -162,8 +165,6 @@ BOARD_SUPPRESS_SECURE_ERASE := true
 
 # Vold
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
-
-ANDROID_COMMON_BUILD_MK := true
 
 BOARD_HAS_NO_SELECT_BUTTON := true
 

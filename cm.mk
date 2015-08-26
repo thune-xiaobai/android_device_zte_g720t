@@ -1,6 +1,12 @@
 ## Specify phone tech before including full_phone
 #$(call inherit-product, vendor/cm/config/gsm.mk)
 
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1920
+TARGET_SCREEN_WIDTH := 1080
+
+TARGET_BOOTANIMATION_NAME := 1080
+
 # Release name
 PRODUCT_RELEASE_NAME := g720t
 
@@ -15,6 +21,6 @@ $(call inherit-product, device/zte/g720t/device_g720t.mk)
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := g720t
 PRODUCT_NAME := cm_g720t
-PRODUCT_BRAND := zte
-PRODUCT_MODEL := g720t
-PRODUCT_MANUFACTURER := zte
+PRODUCT_BRAND := ZTE
+PRODUCT_MODEL := ZTE G720T
+PRODUCT_MANUFACTURER := ZTE

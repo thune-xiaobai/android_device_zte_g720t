@@ -36,7 +36,7 @@ TARGET_NO_BOOTLOADER := true
 
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := device/zte/g720t/mkbootimg.mk
-BOARD_KERNEL_CMDLINE := no_console_suspend boot_cpus=0,4,5,6,7 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci msm-poweroff.download_mode=0 msm-poweroff.enable_panic_dload=0
+BOARD_KERNEL_CMDLINE := no_console_suspend boot_cpus=0,4,5,6,7 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci msm-poweroff.download_mode=0 msm-poweroff.enable_panic_dload=0 androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
@@ -103,6 +103,9 @@ BOARD_USES_QCOM_HARDWARE := true
 
 # Qualcomm support
 BOARD_USES_QC_TIME_SERVICES := true
+
+#LOGD
+TARGET_USES_LOGD := false
 
 # Video
 TARGET_HAVE_SIGNED_VENUS_FW := true

@@ -48,6 +48,11 @@ bin/usbhub_init
 bin/ptt_socket_app
 bin/wcnss_filter
 #lib
+lib/libaudiofp.so
+lib/libaudio-resampler.so
+lib/libaudiocore.so
+lib/libaudiokernelplus.so
+lib/libwcnss_qmi.so
 lib/libchromatix_imx135_liveshot.so
 lib/libmmcamera_interface.so
 lib/libmm-qcamera.so
@@ -59,6 +64,11 @@ lib/libloc_eng.so
 lib/libloc_xtra.so
 lib/libOmxVdecHevc.so
 lib/librmnetctl.so
+lib/hw/camera.msm8916.so
+lib/hw/consumerir.default.so
+lib/hw/gps.default.so
+lib/hw/lights.msm8916.so
+lib/hw/sensors.msm8916.so
 #vendor
 vendor/bin/audioflacapp
 vendor/lib/lib-dplmedia.so

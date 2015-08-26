@@ -21,6 +21,8 @@ PRODUCT_COPY_FILES += \
 
 #$(call inherit-product, build/target/product/full.mk)
 
+TARGET_OTA_ASSERT_DEVICE := P839T30,V_P839T30
+
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 PRODUCT_NAME := full_g720t
 PRODUCT_DEVICE := g720t

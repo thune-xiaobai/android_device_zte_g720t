@@ -21,6 +21,10 @@ PRODUCT_COPY_FILES += \
 
 #$(call inherit-product, build/target/product/full.mk)
 
+# Device uses high-density artwork where available
+PRODUCT_AAPT_CONFIG := normal hdpi xhdpi xxhdpi
+PRODUCT_AAPT_PREF_CONFIG := xxhdpi
+
 TARGET_OTA_ASSERT_DEVICE := P839T30,V_P839T30
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0

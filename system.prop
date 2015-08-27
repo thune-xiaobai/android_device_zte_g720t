@@ -202,3 +202,6 @@ persist.sys.silent_powerOn=false
 # ZTE_MODIFY ,saliangkun,2015-04-18 for DRM and widevine , begin
 drm.service.enabled=true
 # ZTE_MODIFY ,saliangkun  for DRM and widevine , end
+
+#graphics
+ro.sf.lcd_density=480

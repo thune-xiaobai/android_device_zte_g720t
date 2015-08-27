@@ -148,8 +148,7 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_HAS_LARGE_FILESYSTEM := true
 
 # TWRP-Specific
-TARGET_RECOVERY_FSTAB := device/zte/g720t/rootdir/etc/fstab.qcom
-RECOVERY_FSTAB_VERSION := 2
+TARGET_RECOVERY_FSTAB := device/zte/g720t/recovery.fstab
 TW_THEME := portrait_hdpi
 RECOVERY_SDCARD_ON_DATA := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true

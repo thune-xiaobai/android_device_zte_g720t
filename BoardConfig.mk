@@ -4,7 +4,7 @@ USE_CAMERA_STUB := true
 -include vendor/zte/g720t/BoardConfigVendor.mk
 
 TARGET_NO_RADIOIMAGE := true
-#TARGET_LDPRELOAD := libNimsWrap.so
+TARGET_LDPRELOAD := libNimsWrap.so
 
 # Architecture
 TARGET_ARCH := arm
@@ -29,6 +29,9 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno405
 
 # Properties
 TARGET_SYSTEM_PROP += device/zte/g720t/system.prop
+
+# Headers
+TARGET_SPECIFIC_HEADER_PATH := device/zte/g720t/include
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8916
@@ -114,20 +117,19 @@ TARGET_USES_LOGD := false
 TARGET_HAVE_SIGNED_VENUS_FW := true
 
 # Wifi
-BOARD_HAS_QCOM_WLAN := true
-BOARD_HAS_QCOM_WLAN_SDK := true
-BOARD_HOSTAPD_DRIVER := NL80211
-BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_qcwcn
-BOARD_WLAN_DEVICE := qcwcn
-BOARD_WPA_SUPPLICANT_DRIVER := NL80211
+# Wifi
+BOARD_HAS_QCOM_WLAN              := true
+BOARD_WLAN_DEVICE                := qcwcn
+BOARD_HOSTAPD_DRIVER             := NL80211
+BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_qcwcn
+BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
-TARGET_USES_QCOM_WCNSS_QMI := true
-TARGET_USES_WCNSS_CTRL := true
-WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME := "wlan"
-WIFI_DRIVER_FW_PATH_AP := "ap"
-WIFI_DRIVER_FW_PATH_STA := "sta"
-WPA_SUPPLICANT_VERSION := VER_0_8_X
+WIFI_DRIVER_FW_PATH_AP           := "ap"
+WIFI_DRIVER_FW_PATH_STA          := "sta"
+WPA_SUPPLICANT_VERSION           := VER_0_8_X
+TARGET_USES_QCOM_WCNSS_QMI       := true
+WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
+WIFI_DRIVER_MODULE_NAME          := "wlan"
 
 # fix this up by examining /proc/mtd on a running device
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -148,7 +150,7 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_HAS_LARGE_FILESYSTEM := true
 
 # TWRP-Specific
-TARGET_RECOVERY_FSTAB := device/zte/g720t/recovery.fstab
+TARGET_RECOVERY_FSTAB := device/zte/g720t/rootdir/etc/fstab.qcom
 TW_THEME := portrait_hdpi
 RECOVERY_SDCARD_ON_DATA := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true

@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2012, 2014, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2015, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -27,7 +27,6 @@
 
 import init.qcom.usb.rc
 import init.target.rc
-import init.storage.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -35,6 +34,23 @@ on early-init
 on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
+    # See storage config details at http://source.android.com/tech/storage/
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+    mkdir /storage/emulated/legacy 0555 root root
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+
+    mkdir /storage/sdcard1 0700 root root
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+
+    # Support legacy paths
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated /storage/emulated/legacy
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -47,6 +63,13 @@ on early-boot
     write /sys/kernel/boot_adsp/boot 1
 
 on boot
+    chown system system /sys/class/leds/torch-light/brightness
+    chown system system /sys/class/leds/green/blink
+
+# Set these so we can remotely update SELinux policy
+    chown system system /sys/fs/selinux/load
+    chown system system /sys/fs/selinux/enforce
+
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
@@ -69,10 +92,6 @@ on boot
     chmod 0660 /dev/ttyHS2
     chown bluetooth bluetooth /dev/ttyHS2
 
-	# ZTE_modify add vol key wakeup
-    chmod 0660 /sys/devices/soc.0/gpio_keys.64/power/wakeup
-    chown audio audio sys/devices/soc.0/gpio_keys.64/power/wakeup
-
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -83,12 +102,14 @@ on boot
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
 
+    # 4.3 requires this
+    chmod 0644 /proc/cmdline
+
     setprop wifi.interface wlan0
 
 #   Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.wifi    524288,2097152,4194304,262144,524288,1048576
-
 
     setprop ro.telephony.call_ring.multiple false
 
@@ -179,6 +200,10 @@ on boot
 
 # msm specific files that need to be created on /data
 on post-fs-data
+    # we will remap this as /mnt/sdcard with the sdcard fuse tool
+    mkdir /data/media 0770 media_rw media_rw
+    chown media_rw media_rw /data/media
+
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
 
     # Create the directories used by the Wireless subsystem
@@ -268,7 +293,6 @@ on post-fs-data
     exec /system/bin/sh /system/etc/partner.sh
             
     # zte log
-    # zte log
     mkdir /data/local/log 0777 system system
     chown system system /data/local/log
     chmod 0777 /data/local/log
@@ -287,11 +311,6 @@ on post-fs-data
     chmod 777 /cache/fota
     chown root root /cache/fota/error_code
     chmod 666 /cache/fota/error_code
-
-    mkdir /cache/sd
-    chown system system /cache/sd
-    chmod 777 /cache/sd
-    
 	 ##### Engineer Mode #############
 	  chown radio system /data/emode/
 	  chown radio system /data/emode/smsmode.conf
@@ -302,8 +321,6 @@ on post-fs-data
 	  chmod 0771 /data/emode/
 	  chmod 0776 /data/emode/sensormode.conf
 	  ##### Engineer Mode END ############# 
-
-    start kcrashlog
 # Export GPIO56 for fusion targets to enable/disable hub
 service usbhub_init /system/bin/usbhub_init
    class late_start
@@ -311,35 +328,15 @@ service usbhub_init /system/bin/usbhub_init
    disabled
    oneshot
 
-service qcomsysd /system/bin/qcom-system-daemon
-    class main
-
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
 
 on property:persist.radio.atfwd.start=false
     stop atfwd
 
-# corefile limit and ETB enabling
-on property:persist.debug.trace=1
-    mkdir /data/core 0777 root root
-    write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 1
-    write /sys/bus/coresight/devices/coresight-etm0/enable 0
-    write /sys/bus/coresight/devices/coresight-etm1/enable 0
-    write /sys/bus/coresight/devices/coresight-etm2/enable 0
-    write /sys/bus/coresight/devices/coresight-etm3/enable 0
-    write /sys/bus/coresight/devices/coresight-etm0/reset 1
-    write /sys/bus/coresight/devices/coresight-etm1/reset 1
-    write /sys/bus/coresight/devices/coresight-etm2/reset 1
-    write /sys/bus/coresight/devices/coresight-etm3/reset 1
-    write /sys/bus/coresight/devices/coresight-etm0/enable 1
-    write /sys/bus/coresight/devices/coresight-etm1/enable 1
-    write /sys/bus/coresight/devices/coresight-etm2/enable 1
-    write /sys/bus/coresight/devices/coresight-etm3/enable 1
-    write /sys/module/coresight_event/parameters/event_abort_enable 1
+on property:init.svc.surfaceflinger=stopped
+    stop ppd
+    stop hdmid
 
 on property:ro.board.platform=msm7630_fusion
     start usbhub_init
@@ -393,10 +390,6 @@ service cnd /system/bin/cnd
     class late_start
     socket cnd stream 660 root inet
 
-service dpmd /system/bin/dpmd
-    class late_start
-    socket dpmd stream 660 root system
-
 service irsc_util /system/bin/logwrapper /system/bin/irsc_util "/etc/sec_config"
     class main
     user root
@@ -417,18 +410,6 @@ service rfs_access /system/bin/rfs_access
 
 on property:ro.boot.emmc=true
     start rfs_access
-
-on property:wc_transport.start_hci=true
-    start start_hci_filter
-
-on property:wc_transport.start_hci=false
-    stop start_hci_filter
-
-service start_hci_filter /system/bin/wcnss_filter
-    class late_start
-    user bluetooth
-    group bluetooth qcom_diag
-    disabled
 
 service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
@@ -468,13 +449,6 @@ service bt-sap /system/bin/sapd 15
     class late_start
     disabled
     oneshot
-
-service btsnoop /system/bin/btsnoop
-   user bluetooth
-   group bluetooth net_bt_admin sdcard_rw sdcard_r
-   class late_start
-   disabled
-   oneshot
 
 service ftmd /system/bin/logwrapper /system/bin/ftmdaemon
     class late_start
@@ -561,7 +535,7 @@ service p2p_supplicant /system/bin/wpa_supplicant \
     -I/system/etc/wifi/p2p_supplicant_overlay.conf -N \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets -puse_p2p_group_interface=1 \
+    -O/data/misc/wifi/sockets -puse_p2p_group_interface=1 -dd \
     -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
 #   we will start as root and wpa_supplicant will switch to user wifi
 #   after setting up the capabilities required for WEXT
@@ -569,13 +543,6 @@ service p2p_supplicant /system/bin/wpa_supplicant \
 #   group wifi inet keystore
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
-    disabled
-    oneshot
-
-service hostapd /system/bin/hostapd -e/data/misc/wifi/entropy.bin -d /data/misc/wifi/hostapd.conf
-    class main
-    socket wpa_wlan0 dgram 660 wifi wifi
-    group system wifi inet
     disabled
     oneshot
 
@@ -729,13 +696,19 @@ on property:sys.boot_completed=1
     start qcom-post-boot
     start config-zram
     #start config-video
-		#start init-postfreq
+    #start init-postfreq
 
 service atfwd /system/bin/ATFWD-daemon
     class late_start
     user system
     group system radio
 
+service hostapd /system/bin/hostapd -dd /data/hostapd/hostapd.conf
+    class late_start
+    user root
+    group root
+    oneshot
+    disabled
 
 service ds_fmc_appd /system/bin/ds_fmc_appd -p "rmnet0" -D
     class late_start
@@ -779,29 +752,24 @@ service ril-daemon2 /system/bin/rild -c 2
     disabled
     group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
 
-service usb_uicc_enable /system/bin/sh /system/etc/init.qcom.uicc.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-
-service usb_uicc_daemon /system/bin/usb_uicc_client
-    class main
-    user system
-    group system log net_raw
-    oneshot
-
-on property:usb_uicc.enabled=1
-    start usb_uicc_enable
-
-on property:usb_uicc.enabled=0
-    start usb_uicc_enable
-
 service profiler_daemon /system/bin/profiler_daemon
     class late_start
     user root
     group root
     disabled
+
+# virtual sdcard daemon running as media_rw (1023)
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class late_start
+
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    class late_start
+    disabled
+
+# Binding fuse mount point to /storage/emulated/legacy
+on property:init.svc.sdcard=running
+    wait /mnt/shell/emulated/0
+    mount none /mnt/shell/emulated/0 /storage/emulated/legacy bind
 
 service hcidump /system/bin/sh /system/etc/hcidump.sh
     user bluetooth
@@ -828,24 +796,6 @@ service fastmmisrv /system/bin/sh /init.qcom.factory.sh
     disabled
     oneshot
 
-#zuoyanqiang 20131212 for ftm
-service ftm_main /system/bin/ftm_main
-    user root
-    group root
-    disabled
- 
-#zhangfengyu    
-service zte_diag /system/bin/zte_diag
-    class main
-    user root
-    group radio cache inet misc audio
-
- 
-service diag_klog /system/bin/diag_klog
-    class main
-    user root
- #   group radio cache inet misc audio  #wangchong del for compass chip test
-   
 on ffbm
     ifup lo
     hostname localhost
@@ -868,16 +818,6 @@ service charger_monitor /system/bin/charger_monitor
     group root
     disabled
 
-service qbcharger /charger -m 1
-    disabled
-    oneshot
-
-on property:sys.qbcharger.enable=true
-    start qbcharger
-
-on property:sys.qbcharger.enable=false
-    stop qbcharger
-
 service diag_mdlog_start /system/bin/diag_mdlog
     class late_start
     # songbo for mdlog 
@@ -894,293 +834,16 @@ service diag_mdlog_stop /system/bin/diag_mdlog -k
     disabled
     oneshot
 
-service qlogd /system/xbin/qlogd
-    class main
-    disabled
-on property:persist.sys.qlogd=3
-    start qlogd
-on property:persist.sys.qlogd=2
-    stop qlogd
 
-service rootagent /system/bin/sh /system/etc/init.qcom.rootagent.sh
-    disabled
-    oneshot
-on property:persist.sys.rootagent=1
-    start rootagent
-on property:persist.sys.rootagent=0
-    stop rootagent
-
-service vm_bms /system/bin/vm_bms
-    user root
-    group root
-    disabled
-
-service msm_irqbalance /system/bin/msm_irqbalance -p 0,0,0,0,1,1,1,1
-    class core
-    user root
-    group root
-    disabled
-
-service power_engine /system/bin/sh /system/etc/init.qti.power.sh
-    user root
-    group root
-    disabled
-
-on property:persist.sys.power_ctrl=1
-    start power_engine
-on property:persist.sys.power_ctrl=0
-    stop power_engine
-#zte log wuyun changed user close log  for eng open log begin
-#service logcat /system/bin/logcat -n 20 -v time -f /data/local/log/logcat.log -r 4096 -k &
-#    class main
-#    disabled
-#	
-#service logcat_radio /system/bin/logcat -b radio -n 20 -v time -f /data/local/log/radio.log -r 4096 &
-#    class main
-#    disabled
-#	
-#service logcat_events /system/bin/logcat -b events -n 4 -v time -f /data/local/log/events.log -r 1024 &
-#    class main
-#    disabled
-
-service logcat_main /system/bin/logcat -b system -b main -b events -r4096 -n 24 -v threadtime -f /data/local/log/logcat.log
-    class main
-    disabled
-
-service logcat_radio /system/bin/logcat -b radio -r4096 -n 24 -v threadtime -f /data/local/log/radio.log
-    class main
-    disabled
-
-service kcrashlog /system/bin/kcrashlog
-    oneshot
-    disabled
-
-on property:persist.sys.ztelog.enable=1
-    start logcat_main
-    start logcat_radio 
-    start wakelock_source
-    start topProcess
-	
-on property:persist.sys.ztelog.enable=0
-    stop logcat_main
-    stop logcat_radio 
-    stop wakelock_source
-	stop topProcess
-    
-service logcat_sd0 /system/bin/logcat -n 20 -v time -f /storage/sdcard0/log/logcat.log -r 4096 -k &
-    class main
-    disabled
-	
-service logcat_radio_sd0 /system/bin/logcat -b radio -n 20 -v time -f /storage/sdcard0/log/radio.log -r 4096 &
-    class main
-    disabled
-	
-service log_events_sd0 /system/bin/logcat -b events -n 4 -v time -f /storage/sdcard0/log/events.log -r 1024 &
-    class main
-    disabled
-	
-on property:persist.sys.ztelog.sd0=1
-    start logcat_sd0
-    start logcat_radio_sd0 
-    start log_events_sd0
-
-on property:persist.sys.ztelog.sd0=0
-    stop logcat_sd0
-    stop logcat_radio_sd0 
-    stop log_events_sd0    
-    
-service logcat_sd1 /system/bin/logcat -n 20 -v time -f /storage/sdcard1/log/logcat.log -r 4096 -k &
-    class main
-    disabled
-	
-service logcat_radio_sd1 /system/bin/logcat -b radio -n 20 -v time -f /storage/sdcard1/log/radio.log -r 4096 &
-    class main
-    disabled
-	
-service log_events_sd1 /system/bin/logcat -b events -n 4 -v time -f /storage/sdcard1/log/events.log -r 1024 &
-    class main
-    disabled
-	
-on property:persist.sys.ztelog.sd1=1
-    start logcat_sd1
-    start logcat_radio_sd1 
-    start log_events_sd1
-
-on property:persist.sys.ztelog.sd1=0
-    stop logcat_sd1
-    stop logcat_radio_sd1 
-    stop log_events_sd1        
-
-service getsd0log /system/bin/sh /system/etc/startsdlog.sh 0
-    oneshot
-    disabled    
-    
-service getsd1log /system/bin/sh /system/etc/startsdlog.sh 1
-    oneshot
-    disabled   
-         
-on property:sys.startsdlog=0
-    start getsd0log
-    
-on property:sys.startsdlog=1
-    start getsd1log   
-   
-service zteloginit /system/bin/sh /system/etc/launch
-    class main
-    oneshot
-       
-service ssr_init /system/bin/sh /system/etc/ssr_init.sh
-    class main
-    oneshot
     
 #/*--ZTE:added for backup 20140905--*/
 service app6939 /system/bin/app6939
     class main
     user root
 
-on property:sys.ssrinit=1
-    start ssr_init        
+on property:persist.sys.gesture.enable=1
+    write /sys/class/tsp_fw/touchscreen/gesture_enable 1
     
-service panic_dl_init /system/bin/sh /system/etc/panic_dload_init.sh
-    class main
-    oneshot
-
-on property:sys.panic_dload=1
-    start panic_dl_init           
-    
-service dloadmode_init /system/bin/sh /system/etc/dloadmode_init.sh
-    class main
-    oneshot
-    
-on property:sys.dloadmode=1
-    start dloadmode_init  
-    
-service ftm_poweroff /system/bin/ftm_poweroff
-    oneshot
-    disabled
-    
-on property:sys.poweroff=1
-    start ftm_poweroff
-	##### Engineer Mode #############
-service EmodeService /system/bin/emodesvr
-	class main
-    user root
-##### Engineer Mode END #############
-
-#zte-modify by shizuyong for wifi(wcn3620) test tool begin
-service wifi_ftmd /system/bin/wifi_ftmd_new 
-    socket wifi_ftmd dgram 0666 
-    disabled 
-    oneshot
-#zte-modify by shizuyong for wifi(wcn3620) test tool end  
-  # thermal-special for Mr. Yang  
-service thermal-special /system/bin/thermal-engine -c /system/etc/thermal-special.conf
-   disabled
-   class main
-   user root
-   group root
-
-on property:sys.smartphone.adjuststrategy=1
-   stop thermal-engine
-   start thermal-special
-
-on property:sys.smartphone.adjuststrategy=0
-   stop thermal-special
-   start thermal-engine  
-service ftm_usbpf /system/bin/ftm_usb
-    oneshot
-    disabled    
-
-on property:sys.usb_poweroff=1
-    start ftm_usbpf  
-    
-on property:sys.initlog=7
-    loglevel 7     
-    
-on property:sys.initlog=5
-    loglevel 5
-    
-on property:sys.initlog=3
-    loglevel 3  
-
-service memtester4 /system/bin/memtester 4M 1
-    oneshot
-    disabled    
-
-on property:sys.memtester.enable=4
-    start memtester4
-
-service memtester10 /system/bin/memtester 10M 1
-    oneshot
-    disabled    
-
-on property:sys.memtester.enable=10
-    start memtester10
-
-service memtester50 /system/bin/memtester 50M 1
-    oneshot
-    disabled    
-
-on property:sys.memtester.enable=50
-    start memtester50
-
-service memtester100 /system/bin/memtester 100M 1
-    oneshot
-    disabled    
-
-on property:sys.memtester.enable=100
-    start memtester100
-
-service memtester500 /system/bin/memtester 500M 1
-    oneshot
-    disabled    
-
-on property:sys.memtester.enable=500
-    start memtester500
-
-
-service hw_shutdown /system/bin/sh  /system/etc/hw_shutdown.sh nowait
-    oneshot
-    disabled 
-
-on property:sys.hwshutdown.enable=1
-    start hw_shutdown
-
-service ftm_hwshutdown /system/bin/ftm_hwshutdown
-    oneshot
-    disabled
-
-on property:sys.hwshutdown.trigger=1
-   start ftm_hwshutdown
-   
-on property:sys.recoverylog=1
-    chown system system /cache
-    chmod 0777 /cache
-    chmod 0777 /cache/recovery
-    
-on property:persist.sys.pkresettime=4    
-    write /sys/devices/virtual/misc/zte_boardid/resettime 4
-    
-service md5check /system/bin/sh  /system/etc/md5check.sh
-    oneshot
-    disabled 
-
-on property:sys.md5check.enable=1
-    start md5check
-    
-#zte log wuyun changed user close log  for eng open log begin	
-
-service init-postfreq /system/bin/sh /system/etc/init.postfreq.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-	
-service topProcess /system/bin/topProcess
-    oneshot
-    disabled
-	
-service wakelock_source /system/bin/wakelock_source
-    oneshot
-    disabled
+on property:persist.sys.gesture.enable=0
+    write /sys/class/tsp_fw/touchscreen/gesture_enable 0 
 

@@ -231,16 +231,6 @@
     setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
     setprop net.tcp.buffersize.evdo    4094,87380,262144,4096,16384,262144
 
-# ZTE_MODIFY 2012/05/08 for FTM mode
-    #echo 0    >     /sys/class/android_usb/android0/enable
-    #echo 19d2 >   /sys/class/android_usb/android0/idVendor
-    #echo 0249 >     /sys/class/android_usb/android0/idProduct
-    #echo diag >     /sys/class/android_usb/android0/f_diag/clients
-    #echo diag,adb > /sys/class/android_usb/android0/functions
-    #echo 1        > /sys/class/android_usb/android0/enable
-    setprop sys.usb.config diag,adb
-# ZTE_MODIFY end
-
 # Assign TCP buffer thresholds to be ceiling value of technology maximums
 # Increased technology maximums should be reflected here.
     echo 2097152 > /proc/sys/net/core/rmem_max
@@ -256,8 +246,8 @@
 
 # Start the following services needed for fftm
     start config_bluetooth
-    #start media
-    #start fastmmi
+    start media
+    start fastmmi
     start adbd
     start qcom-post-boot
     start rmt_storage
@@ -267,9 +257,4 @@
     start qcom-usb-sh
     start qcomsysd
     start ptt_ffbm
-    #start ftm_ffbm
-
-# zuoyanqiang 20131212 for ftm
-    start zte_diag
-    start diag_klog
-    start ftm_main
+    start ftm_ffbm

@@ -1,0 +1,1 @@
+cmd_arch/arm/oprofile/oprofile.ko := arm-eabi-ld -EL -r  -T /home/baishulai/hdd/g720t/cm121/kernel/qcom/msm8916/scripts/module-common.lds --build-id  -o arch/arm/oprofile/oprofile.ko arch/arm/oprofile/oprofile.o arch/arm/oprofile/oprofile.mod.o

@@ -1,0 +1,1 @@
+cmd_drivers/input/evbug.ko := arm-eabi-ld -EL -r  -T /home/baishulai/hdd/g720t/cm121/kernel/qcom/msm8916/scripts/module-common.lds --build-id  -o drivers/input/evbug.ko drivers/input/evbug.o drivers/input/evbug.mod.o

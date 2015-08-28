@@ -1,0 +1,1 @@
+cmd_crypto/ansi_cprng.ko := arm-eabi-ld -EL -r  -T /home/baishulai/hdd/g720t/cm121/kernel/qcom/msm8916/scripts/module-common.lds --build-id  -o crypto/ansi_cprng.ko crypto/ansi_cprng.o crypto/ansi_cprng.mod.o

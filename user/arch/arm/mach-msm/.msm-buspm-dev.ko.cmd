@@ -1,0 +1,1 @@
+cmd_arch/arm/mach-msm/msm-buspm-dev.ko := arm-eabi-ld -EL -r  -T /home/baishulai/hdd/g720t/cm121/kernel/qcom/msm8916/scripts/module-common.lds --build-id  -o arch/arm/mach-msm/msm-buspm-dev.ko arch/arm/mach-msm/msm-buspm-dev.o arch/arm/mach-msm/msm-buspm-dev.mod.o

@@ -1,0 +1,1 @@
+cmd_drivers/gud/mcKernelApi.ko := arm-eabi-ld -EL -r  -T /home/baishulai/hdd/g720t/cm121/kernel/qcom/msm8916/scripts/module-common.lds --build-id  -o drivers/gud/mcKernelApi.ko drivers/gud/mcKernelApi.o drivers/gud/mcKernelApi.mod.o

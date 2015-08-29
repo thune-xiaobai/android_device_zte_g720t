@@ -21,6 +21,7 @@ ril.subscription.types=NV,RUIM
 DEVICE_PROVISIONED=1
 # Start in cdma mode
 ro.telephony.default_network=20
+persist.radio.multisim.config=dsds
 
 debug.sf.hw=1
 debug.egl.hw=1

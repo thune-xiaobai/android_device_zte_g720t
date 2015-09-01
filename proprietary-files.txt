@@ -547,6 +547,7 @@ etc/firmware/wlan/prima/WCNSS_cfg.dat
 etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin
 #usr
 usr/keylayout/AVRCP.kl
+usr/keylayout/Generic.kl
 usr/keylayout/gpio-keys.kl
 usr/keylayout/synaptics_rmi4_i2c.kl
 #etc

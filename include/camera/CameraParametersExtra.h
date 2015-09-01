@@ -20,8 +20,7 @@
 #define CAMERA_PARAMETERS_EXTRA_C \
 	const char CameraParameters::KEY_SUPPORTED_ZTE_BURST_NUM[] = "zte-burst-num-values"; \
 	const char CameraParameters::KEY_ZTE_BURST_NUM[] = "zte-burst-num"; \
-    const char CameraParameters::KEY_SUPPORTED_ZTE_MAX_BURST_NUM[] = "zte-max-burst-nume-values"; \
-    const char CameraParameters::KEY_ZTE_MAX_BURST_NUM[] = "zte-max-burst-nume"; \
+    const char CameraParameters::KEY_ZTE_MAX_BURST_NUM[] = "zte-max-burst-num"; \
 	const char CameraParameters::KEY_SUPPORTED_ZTE_BLINK_MODE[] = "zte-blink-mode-values"; \
 	const char CameraParameters::KEY_ZTE_BLINK_MODE[] = "zte-blink-mode"; \
 	const char CameraParameters::KEY_SUPPORTED_ZTE_SMILE_MODE[] = "zte-smile-mode-values"; \
@@ -35,7 +34,6 @@
 	static const char KEY_ARCSOFT_SKIN_BRIGHT_LEVEL[]; \
 	static const char KEY_SUPPORTED_ZTE_BURST_NUM[]; \
 	static const char KEY_ZTE_BURST_NUM[]; \
-    static const char KEY_SUPPORTED_ZTE_MAX_BURST_NUM[]; \
     static const char KEY_ZTE_MAX_BURST_NUM[]; \
 	static const char KEY_SUPPORTED_ZTE_BLINK_MODE[]; \
 	static const char KEY_ZTE_BLINK_MODE[]; \
